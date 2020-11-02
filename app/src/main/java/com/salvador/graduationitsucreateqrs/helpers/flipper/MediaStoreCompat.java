@@ -40,7 +40,7 @@ import java.io.OutputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.salvador.graduationitsucreateqr.helpers.flipper.MediaStoreCompat.Status.DELETE;
+import static com.salvador.graduationitsucreateqrs.helpers.flipper.MediaStoreCompat.Status.DELETE;
 
 
 @SuppressWarnings("unused")
