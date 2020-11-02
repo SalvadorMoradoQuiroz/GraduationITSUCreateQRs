@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements Information {
             @Override
             public void onClick(View view)
             {
+                /*ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+                    "Buscando...", true);
+                firestoreHelper.sendAllInformation(MainActivity.this,dialog);*/
                 showDialogBuscar();
             }
         });

@@ -22,6 +22,7 @@ import com.salvador.graduationitsucreateqrs.helpers.utility.StringHelper;
 import com.salvador.graduationitsucreateqrs.MainActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -51,7 +52,7 @@ public class FirestoreHelper
                                                       "Carrera: "+StringHelper.getCarrara(alumno.getCarrera()) +"\n"+
                                                       "Grupo: "+alumno.getGrupo()+"\n"+
                                                       "Si existe algún error, comunícate con el jefe de carrera de ISC.\n"+
-                                                        R.string.correo_jefe+"\n\n"+
+                                                       context.getString(R.string.correo_jefe)+"\n\n"+
                                                       "Comparte la imagen con tu invitado ya que en la entrada será requerida.");
                         alertDialogBuilder.setPositiveButton("Aceptar",
                                 new DialogInterface.OnClickListener() {
