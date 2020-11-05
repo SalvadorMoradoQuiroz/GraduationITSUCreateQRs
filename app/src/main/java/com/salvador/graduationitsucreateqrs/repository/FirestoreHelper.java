@@ -74,8 +74,8 @@ public class FirestoreHelper
                         final AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder(context);
                         alertDialogBuilder.setCancelable(false);
                         alertDialogBuilder.setTitle("Error de Obtención");
-                        alertDialogBuilder.setMessage("No hay Información acerca del número de control ingresado, comunícate con el jefe de carrera de ISC."+
-                                R.string.correo_jefe);
+                        alertDialogBuilder.setMessage("No hay Información acerca del número de control ingresado, comunícate con el jefe de carrera de ISC. "+
+                                context.getString(R.string.correo_jefe)+"\n\n");
                         alertDialogBuilder.setPositiveButton("Aceptar",
                                 new DialogInterface.OnClickListener() {
                                     @Override
