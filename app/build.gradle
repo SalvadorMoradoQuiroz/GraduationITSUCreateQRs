@@ -55,4 +55,12 @@ dependencies {
     //lottie animations
     def lottieVersion = "3.4.3"
     implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    //encriptacion base 64
+    // https://mvnrepository.com/artifact/commons-codec/commons-codec
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.14'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-crypto
+    implementation group: 'org.apache.commons', name: 'commons-crypto', version: '1.0.0'
+
+
 }

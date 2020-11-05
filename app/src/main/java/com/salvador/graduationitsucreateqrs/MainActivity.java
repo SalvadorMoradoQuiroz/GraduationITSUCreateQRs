@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
 import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
+import com.salvador.graduationitsucreateqrs.helpers.utility.Encriptacion;
 import com.salvador.graduationitsucreateqrs.repository.FirestoreHelper;
 
 import net.glxn.qrgen.android.QRCode;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements Information {
                         "Buscando...", true);
                 dialog.show();
                 String numerodecontrol = textInput_numeroCtrl.getEditText().getText().toString();
+
                 if(numerodecontrol.length()==8)
                 {
                     firestoreHelper.getData(numerodecontrol,dialog,MainActivity.this,MainActivity.this);
@@ -247,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements Information {
         if(alumno!=null)
         {
             qr=alumno.getId()+"|"+alumno.getNombre()+"|"+alumno.getCarrera();//consulta a firebase
-            bitmap = QRCode.from(qr).withSize(400, 400).bitmap();
+            bitmap = QRCode.from( new Encriptacion().encryptAE(qr)).withSize(400, 400).bitmap();
             imageView.setImageBitmap(bitmap);
             imageView.setVisibility(View.VISIBLE);
         }
