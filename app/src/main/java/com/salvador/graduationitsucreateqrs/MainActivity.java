@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
 import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
 import com.salvador.graduationitsucreateqrs.helpers.utility.Encriptacion;
+import com.salvador.graduationitsucreateqrs.helpers.utility.StringHelper;
 import com.salvador.graduationitsucreateqrs.repository.FirestoreHelper;
 
 import net.glxn.qrgen.android.QRCode;
@@ -45,8 +46,10 @@ public class MainActivity extends AppCompatActivity implements Information {
     private ImageView imageView;
     private Bitmap bitmap;
     private String qr;
+    private String nombreQR;
     private final FirestoreHelper firestoreHelper = new FirestoreHelper();
     LottieAnimationView animationView2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements Information {
         setTitle(R.string.graduaci_n_itsu);
 
 
+
         buttonGuardar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -69,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements Information {
                 if(bitmap!=null)
                 {
                     if (solicitarPermiso()) {
-                        String nombre = "Invitación Graduación ITSU";
+
                         try {
-                            saveImage(bitmap, nombre);
+                            saveImage(bitmap, nombreQR);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -168,9 +172,8 @@ public class MainActivity extends AppCompatActivity implements Information {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     // Permission Granted
                     // Rutina que se ejecuta al aceptar
-                    String nombre = "Invitación Graduación ITSU";
                     try {
-                        saveImage(bitmap, nombre);
+                        saveImage(bitmap, nombreQR);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -249,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements Information {
         if(alumno!=null)
         {
             qr=alumno.getId()+"|"+alumno.getNombre()+"|"+alumno.getCarrera();//consulta a firebase
+            nombreQR = alumno.getNombre()+"-"+StringHelper.obtenerFecha();
             bitmap = QRCode.from( new Encriptacion().encryptAE(qr)).withSize(400, 400).bitmap();
             imageView.setImageBitmap(bitmap);
             imageView.setVisibility(View.VISIBLE);

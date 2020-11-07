@@ -2,7 +2,9 @@ package com.salvador.graduationitsucreateqrs.helpers.utility;
 
 import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class StringHelper
 {
@@ -43,6 +45,12 @@ public class StringHelper
                 break;
         }
         return carr;
+    }
+    public static String obtenerFecha() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
     }
     public ArrayList<Alumno> getData()
     {
