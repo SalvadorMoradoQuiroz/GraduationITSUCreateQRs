@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
@@ -27,15 +28,22 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
 import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
 import com.salvador.graduationitsucreateqrs.helpers.utility.Encriptacion;
+import com.salvador.graduationitsucreateqrs.helpers.utility.ImagesHelper;
 import com.salvador.graduationitsucreateqrs.helpers.utility.StringHelper;
+import com.salvador.graduationitsucreateqrs.repository.FirebaseStorageHelper;
 import com.salvador.graduationitsucreateqrs.repository.FirestoreHelper;
 
 import net.glxn.qrgen.android.QRCode;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
+
+import id.zelory.compressor.Compressor;
 
 
 public class MainActivity extends AppCompatActivity implements Information {
@@ -48,8 +56,16 @@ public class MainActivity extends AppCompatActivity implements Information {
     private String qr;
     private String nombreQR;
     private final FirestoreHelper firestoreHelper = new FirestoreHelper();
+    private FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
     LottieAnimationView animationView2;
+    private Alumno alumno;
+    private File imagen;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseStorageHelper.setInformationListener(MainActivity.this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +80,10 @@ public class MainActivity extends AppCompatActivity implements Information {
         setTitle(R.string.graduaci_n_itsu);
 
 
-
-        buttonGuardar.setOnClickListener(new View.OnClickListener()
-        {
+        buttonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if(bitmap!=null)
-                {
+            public void onClick(View view) {
+                if (bitmap != null) {
                     if (solicitarPermiso()) {
 
                         try {
@@ -79,21 +91,17 @@ public class MainActivity extends AppCompatActivity implements Information {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }else {
+                    } else {
                         //Toast.makeText(getApplicationContext(),"Para guardar la invitación necesita conceder los permisos.",Toast.LENGTH_LONG).show();
                     }
-                }
-                else
-                {
+                } else {
                     Snackbar.make(view, "Debes buscar la invitación primero.", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
-        buttonBuscar.setOnClickListener(new View.OnClickListener()
-        {
+        buttonBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 /*ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
                     "Buscando...", true);
                 firestoreHelper.sendAllInformation(MainActivity.this,dialog);*/
@@ -103,15 +111,14 @@ public class MainActivity extends AppCompatActivity implements Information {
 
     }
 
-    private void showDialogBuscar()
-    {
+    private void showDialogBuscar() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
         View view = inflater.inflate(R.layout.dialog_search_invitation, null);
         builder.setView(view);
 
-        final AlertDialog dialogSearchInvitation =builder.create();
+        final AlertDialog dialogSearchInvitation = builder.create();
         dialogSearchInvitation.setCancelable(false);
         dialogSearchInvitation.show();
         Button buttonBuscar = view.findViewById(R.id.buttonBuscar);
@@ -128,13 +135,10 @@ public class MainActivity extends AppCompatActivity implements Information {
                 dialog.show();
                 String numerodecontrol = textInput_numeroCtrl.getEditText().getText().toString();
 
-                if(numerodecontrol.length()==8)
-                {
-                    firestoreHelper.getData(numerodecontrol,dialog,MainActivity.this,MainActivity.this);
+                if (numerodecontrol.length() == 8) {
+                    firestoreHelper.getData(numerodecontrol, dialog, MainActivity.this, MainActivity.this);
                     dialogSearchInvitation.dismiss();
-                }
-                else
-                {
+                } else {
                     Snackbar.make(view, "Número de control no válido.", Snackbar.LENGTH_SHORT).show();
                     //Toast.makeText(getApplicationContext(),"Número de control no válido.",Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
@@ -151,15 +155,15 @@ public class MainActivity extends AppCompatActivity implements Information {
     }
 
 
-    private boolean solicitarPermiso(){
+    private boolean solicitarPermiso() {
         int permiso = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if(permiso!= PackageManager.PERMISSION_GRANTED){
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE_ASK_PERMISSION);
+        if (permiso != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSION);
             }
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -167,9 +171,9 @@ public class MainActivity extends AppCompatActivity implements Information {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSION:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
                     // Rutina que se ejecuta al aceptar
                     try {
@@ -177,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements Information {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     // Permission Denied
                     Snackbar.make(findViewById(android.R.id.content), "Para guardar la invitación necesita conceder los permisos.", Snackbar.LENGTH_SHORT).show();
                 }
@@ -197,10 +201,9 @@ public class MainActivity extends AppCompatActivity implements Information {
             Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
             outputStream = contentResolver.openOutputStream(Objects.requireNonNull(imageUri));
 
-        }
-        else {
-            String imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()+"/";
-            File dir = new File(imagesDir, "Invitación ITSU" );
+        } else {
+            String imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/";
+            File dir = new File(imagesDir, "Invitación ITSU");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -217,11 +220,12 @@ public class MainActivity extends AppCompatActivity implements Information {
 
     /**
      * Metodo para actualizar la galería
+     *
      * @param file imagen a guardar
      */
-    private void MakeSureFileWasCreatedThenMakeAvaliable(File file){
+    private void MakeSureFileWasCreatedThenMakeAvaliable(File file) {
         MediaScannerConnection.scanFile(getApplicationContext(),
-                new String[] { file.toString() } , null,
+                new String[]{file.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
 
                     public void onScanCompleted(String path, Uri uri) {
@@ -230,33 +234,72 @@ public class MainActivity extends AppCompatActivity implements Information {
     }
 
     @Override
-    public void status(String message)
-    {
-        if(message.equals("fiesta"))
-        {
+    public void status(String message) {
+        if (message.equals("fiesta")) {
             animationView2.setVisibility(View.VISIBLE);
             animationView2.playAnimation();
             Snackbar.make(animationView2.getRootView(), "Felicidades Ingeniero ITSU", Snackbar.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
             Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
-    public void getData(Alumno alumno)
-    {
+    public void getData(Alumno alumno) {
         //creacion de QR
-        if(alumno!=null)
-        {
-            qr=alumno.getId()+"|"+alumno.getNombre()+"|"+alumno.getCarrera();//consulta a firebase
-            nombreQR = alumno.getNombre()+"-"+StringHelper.obtenerFecha();
-            bitmap = QRCode.from( new Encriptacion().encryptAE(qr)).withSize(400, 400).bitmap();
+        if (alumno != null) {
+            this.alumno = alumno;
+
+            qr = alumno.getId() + "|" + alumno.getNombre() + "|" + alumno.getCarrera();//consulta a firebase
+            nombreQR = alumno.getNombre() + "-" + StringHelper.obtenerFecha();
+            bitmap = QRCode.from(new Encriptacion().encryptAE(qr)).withSize(400, 400).bitmap();
             imageView.setImageBitmap(bitmap);
             imageView.setVisibility(View.VISIBLE);
+
+            try {
+                imagen = ImagesHelper.from(getApplicationContext(),getImage(bitmap));
+                imagen= new Compressor(getApplicationContext()).compressToFile(imagen);
+                firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
+                firebaseStorageHelper.addImage(alumno.getId(),Uri.fromFile(imagen), MainActivity.this,"");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /*try {
+                //create a file to write bitmap data
+                File imagen = new File(getApplicationContext().getCacheDir(), "Invitación-" + alumno.getId());
+
+                //Convert bitmap to byte array
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                //write the bytes in file
+                FileOutputStream fos = null;
+
+                fos = new FileOutputStream(imagen);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+
+                //imagen = new Compressor(getApplicationContext()).compressToFile(imagen);
+
+                firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
+                firebaseStorageHelper.addImage(alumno.getId(), Uri.parse(imagen.toURI().toString()), MainActivity.this);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+            }
+
         }
 
+         public Uri getImage(Bitmap bitmap)
+         {
+             ByteArrayOutputStream bites = new ByteArrayOutputStream();
+             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bites);
+             String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, StringHelper.obtenerFecha(), "");
+             return Uri.parse(path);
+        }
     }
-}

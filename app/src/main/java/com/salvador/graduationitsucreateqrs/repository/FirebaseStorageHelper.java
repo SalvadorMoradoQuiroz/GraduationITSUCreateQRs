@@ -15,49 +15,50 @@ import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
 public class FirebaseStorageHelper
 {
     private FirebaseStorage mStorage = FirebaseStorage.getInstance();
-    private StorageReference productFiles = mStorage.getReference().child("alumnos");
-
+    private StorageReference studentsFiles = mStorage.getReference().child("alumnos");
     private Information information;
-    public void addImage(final String numeroCtrl, Uri uri, final AlertDialog dialog, Context context)
-    {
 
-        //Register observers to listen for when the download is done or if it fails
-        productFiles.child(numeroCtrl).putFile(uri).addOnFailureListener(new OnFailureListener() {
+    public void addImage(final String numeroCtrl, Uri uri, Context context, String email)
+    {
+        //Register observers to listen for when the download is done or if it fails.
+        studentsFiles.child(numeroCtrl).putFile(uri).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception)
             {
-                dialog.dismiss();
-                //status.status(context.getString(R.string.error_image_update));
+                information.status("Error al subir la imagen de QR al sistema, verifica tu conexión a Internet");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-               // status.status(context.getString(R.string.imagen_update));
-
-                productFiles.child(numeroCtrl).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                //information.status("Se ha subido la imagen de QR al sistema.");
+                studentsFiles.child(numeroCtrl).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri)
                     {
+                        //Enviar el correo electronico
+
                         //firestoreHelperProductos.updateDataProductImage(document,uri.toString(),dialog,status,context);
                     }
                 });
-
             }
         });
 
     }
-    public void deleteImage(final String document, final AlertDialog dialog, Context context)
+
+    public void deleteImage(final String document, Context context)
     {
-        // Delete the file
-        productFiles.child(document).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        // Delete the file.
+        studentsFiles.child(document).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid)
             {
+                information.status("Se ha actualizado la imagen de QR en el sistema.");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception)
             {
+                information.status("Error de actualización de imagen QR, verifica tu conexión a Internet");
             }
         });
     }
@@ -66,5 +67,4 @@ public class FirebaseStorageHelper
     {
         this.information=status;
     }
-
 }

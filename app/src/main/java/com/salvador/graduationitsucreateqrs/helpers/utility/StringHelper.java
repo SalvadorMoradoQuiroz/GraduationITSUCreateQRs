@@ -8,6 +8,9 @@ import java.util.Calendar;
 
 public class StringHelper
 {
+    public static final String email = "";
+    public static final String pass = ""; //Eliminar al subir a gitHub.
+
     public static  String getCarrara(String val)
     {
         String carr = "";
@@ -46,12 +49,14 @@ public class StringHelper
         }
         return carr;
     }
+
     public static String obtenerFecha() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
     }
+
     public ArrayList<Alumno> getData()
     {
         ArrayList<Alumno> alumnos = new ArrayList<>();
