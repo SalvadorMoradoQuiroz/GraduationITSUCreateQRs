@@ -8,8 +8,8 @@ import java.util.Calendar;
 
 public class StringHelper
 {
-    public static final String email = "";
-    public static final String pass = ""; //Eliminar al subir a gitHub.
+    public static final String email = "itsu.sistemas.apps@gmail.com";
+    public static final String pass = "Sistemas99"; //Eliminar al subir a gitHub.
 
     public static  String getCarrara(String val)
     {
@@ -57,7 +57,7 @@ public class StringHelper
         return formattedDate;
     }
 
-    public ArrayList<Alumno> getData()
+    /*public ArrayList<Alumno> getData()
     {
         ArrayList<Alumno> alumnos = new ArrayList<>();
         alumnos.add(new Alumno ("15040135","3","CARRANZA CORZA JULIO DAVID","A"));
@@ -326,5 +326,5 @@ public class StringHelper
 
 
         return alumnos;
-    }
+    }*/
 }

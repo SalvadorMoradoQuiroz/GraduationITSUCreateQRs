@@ -7,6 +7,7 @@ public class Alumno
     String carrera;
     String grupo;
     int status;
+    String correo;
 
     public int getStatus() {
         return status;
@@ -16,13 +17,15 @@ public class Alumno
         this.status = status;
     }
 
-    public Alumno(String id, String nombre, String carrera, String grupo) {
+    public Alumno(String id, String nombre, String carrera, String grupo, String correo) {
         this.id = id;
         this.nombre = nombre;
         this.carrera = carrera;
         this.grupo = grupo;
         status=0;
+        this.correo=correo;
     }
+
     public Alumno(String id, String nombre, String carrera, String grupo,int status) {
         this.id = id;
         this.nombre = nombre;
@@ -61,5 +64,13 @@ public class Alumno
 
     public void setGrupo(String grupo) {
         this.grupo = grupo;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }

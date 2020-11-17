@@ -43,7 +43,7 @@ public class FirestoreHelper
                     if (Objects.requireNonNull(document).exists())
                     {
                         Map<String,Object> data=document.getData();
-                        Alumno alumno = new  Alumno(document.getId(),String.valueOf(data.get("nombre")),String.valueOf(data.get("carrera")),String.valueOf(data.get("grupo")));
+                        Alumno alumno = new  Alumno(document.getId(),String.valueOf(data.get("nombre")),String.valueOf(data.get("carrera")),String.valueOf(data.get("grupo")),String.valueOf(data.get("correo")));
                         final AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder(context);
                         alertDialogBuilder.setCancelable(false);
                         alertDialogBuilder.setTitle("Datos Obtenidos");
@@ -102,7 +102,7 @@ public class FirestoreHelper
 
     }
     // este proceso solo se puede hacer de 500 en 500 no en más
-    public void sendAllInformation(Information information, final ProgressDialog dialog)
+   /*public void sendAllInformation(Information information, final ProgressDialog dialog)
     {
         dialog.show();
         WriteBatch batch = db.batch();
@@ -115,12 +115,12 @@ public class FirestoreHelper
             nycRef = AlumnosCollection.document(alumnos.get(i).getId());
             //batch.set(nycRef, new Alumno2());
 
-            /*Map<String,Object> data = new HashMap<>();
+            Map<String,Object> data = new HashMap<>();
             data.put("nombre",alumnos.get(i).getCarrera());
             data.put("grupo",alumnos.get(i).getGrupo());
             data.put("carrera",alumnos.get(i).getNombre());
             data.put("status",alumnos.get(i).getStatus());
-            batch.update(nycRef,data);*/
+            batch.update(nycRef,data);
         }
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -169,6 +169,6 @@ public class FirestoreHelper
             return grupo;
         }
 
-    }
+    }*/
 
 }

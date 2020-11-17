@@ -261,39 +261,14 @@ public class MainActivity extends AppCompatActivity implements Information {
                 imagen = ImagesHelper.from(getApplicationContext(),getImage(bitmap));
                 imagen= new Compressor(getApplicationContext()).compressToFile(imagen);
                 firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
-                firebaseStorageHelper.addImage(alumno.getId(),Uri.fromFile(imagen), MainActivity.this,"");
+                firebaseStorageHelper.addImage(alumno.getId(),Uri.fromFile(imagen), MainActivity.this,alumno);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            /*try {
-                //create a file to write bitmap data
-                File imagen = new File(getApplicationContext().getCacheDir(), "Invitación-" + alumno.getId());
-
-                //Convert bitmap to byte array
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                byte[] bitmapdata = bos.toByteArray();
-
-                //write the bytes in file
-                FileOutputStream fos = null;
-
-                fos = new FileOutputStream(imagen);
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-
-                //imagen = new Compressor(getApplicationContext()).compressToFile(imagen);
-
-                firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
-                firebaseStorageHelper.addImage(alumno.getId(), Uri.parse(imagen.toURI().toString()), MainActivity.this);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
-            }
-
         }
+
+    }
 
          public Uri getImage(Bitmap bitmap)
          {
@@ -302,4 +277,5 @@ public class MainActivity extends AppCompatActivity implements Information {
              String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, StringHelper.obtenerFecha(), "");
              return Uri.parse(path);
         }
-    }
+
+}

@@ -2,8 +2,11 @@ package com.salvador.graduationitsucreateqrs.helpers.utility;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
 
 import java.io.UnsupportedEncodingException;
 
@@ -19,14 +22,16 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
     private ProgressDialog progressDialog;
     private Session session;
     private Context context;
-    private String[] datos;
+    private Alumno alumno;
+    private Uri uriQR;
 
-    public SenderAsyncTask(Session session, String from, String to, Context context, String[] datos) {
+    public SenderAsyncTask(Session session, String from, String to, Context context, Alumno alumno, Uri uriQR) {
         this.session = session;
         this.from = from;
         this.to = to;
         this.context = context;
-        this.datos = datos;
+        this.alumno = alumno;
+        this.uriQR=uriQR;
     }
 
     @Override
@@ -39,9 +44,7 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-
-                recuperacionCredenciales();
-
+                enviarInvitacion();
         } catch (MessagingException e) {
             e.printStackTrace();
             return e.getMessage();
@@ -61,42 +64,35 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         progressDialog.dismiss();
-
-            Toast.makeText(context, "Se enviará tu "+ datos[2]+ " al equipo de IntegraTec.", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(context, "Se enviará la invitación de la ceremonia de gradución a tu correo "+ alumno.getCorreo(), Toast.LENGTH_LONG).show();
     }
 
-    private void recuperacionCredenciales() throws UnsupportedEncodingException, MessagingException {
+    private void enviarInvitacion() throws UnsupportedEncodingException, MessagingException {
         Message mimeMessage = new MimeMessage(session);
-        mimeMessage.setFrom(new InternetAddress(from, "IntegraTec"));
+        mimeMessage.setFrom(new InternetAddress(from, "ITSU"));
         mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-        mimeMessage.setSubject("Recuperación de credenciales");
+        mimeMessage.setSubject("Invitación Ceremonia De Graduación ITSU.");
         String htmlText2 = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\"https://firebasestorage.googleapis.com/v0/b/integratec-itsu.appspot.com/o/integratec4.png?alt=media&token=67ee39a5-9dbb-4cf7-b0cb-5fe09d9222fc\"></p>";
+        String htmlText3 = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\""+uriQR+"></p>";
         String htmlText =
                 "<body> " +
-                        "<h4><font size=3 face=\"Sans Serif,arial,verdana\">Hola, Ing. " + datos[0] + "</font></h4> " +
+                        "<h4><font size=3 face=\"Sans Serif,arial,verdana\">Hola, Ing. " + alumno.getNombre() + "</font></h4> " +
                         "<br>" +
                         htmlText2 +
                         "<hr>" +
-                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">" + "Tus credenciales <strong>" + datos[0]/*nombre*/
+                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">" + "Este QR es tú pase para la ceremonia de graduación.<strong>"/*nombre*/
                         +
-                        "</strong> son:" + "</font></p>" +
-                        "<p ALIGN=\"center\"><font size=3 face=\"Sans Serif,arial,verdana\">" + "<br><strong>" + to + "<br><br>" + datos[1]/*contraseña*/ + "</strong>" + "</font></p>" +
-                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">Si tú no solisitaste esto no tienes porque preocuparte tus datos están protegidos.</p>" +
-                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">Saludos cordiales,</font></p>" +
-                        "<p><font size=3 face=\"Sans Serif,arial,verdana\">El equipo </font><font color=\"#EA2925\" size=3 face=\"Sans Serif,arial,verdana\">IntegraTec.</font>.</p>" +
+                        htmlText3
+                        +
+                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">Compartelo con tu invitado.</p>" +
                         "<br>" +
                         "<hr>" +
                         "<footer>" +
                         "<p><font color=\"#C5BFBF\" size=2 face=\"Sans Serif,arial,verdana\">Gracias!!</font></p>" +
-                        "<p ALIGN=\"justify\"><font color=\"#C5BFBF\" size=1 face=\"Sans Serif,arial,verdana\"><font color=\"#EA2925\" size=1 face=\"Sans Serif,arial,verdana\">©IntegraTec</font> from Instituto Tecnológico Superior de Uruapan, Carretera Uruapan-Carapan No. 5555 Col. La Basilia Uruapan, Michoacán. Este correo fue enviado para: <font color=\"#1a73e8\" size=1 face=\"Sans Serif,arial,verdana\">" + to + "</font> y fue enviado por <font color=\"#EA2925\" size=1 face=\"Sans Serif,arial,verdana\">IntegraTec</font></font>.</p>" +
+                        "<p ALIGN=\"justify\"><font color=\"#C5BFBF\" size=1 face=\"Sans Serif,arial,verdana\"><font color=\"#EA2925\" size=1 face=\"Sans Serif,arial,verdana\">©Graduación ITSU</font> from Instituto Tecnológico Superior de Uruapan, Carretera Uruapan-Carapan No. 5555 Col. La Basilia Uruapan, Michoacán. Este correo fue enviado para: <font color=\"#1a73e8\" size=1 face=\"Sans Serif,arial,verdana\">" + to + "</font> y fue enviado por <font color=\"#EA2925\" size=1 face=\"Sans Serif,arial,verdana\">itsu.sistemas.apps@gmail.com</font></font>.</p>" +
                         "</footer>" +
                         "</body>";
         mimeMessage.setContent(htmlText, "text/html; charset=utf-8");
         Transport.send(mimeMessage);
     }
-
-
-
-
 }

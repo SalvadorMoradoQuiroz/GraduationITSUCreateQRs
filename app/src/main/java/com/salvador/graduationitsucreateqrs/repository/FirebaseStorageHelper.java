@@ -11,6 +11,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
+import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
+import com.salvador.graduationitsucreateqrs.helpers.utility.SenderAsyncTask;
+import com.salvador.graduationitsucreateqrs.helpers.utility.StringHelper;
+
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 
 public class FirebaseStorageHelper
 {
@@ -18,7 +27,7 @@ public class FirebaseStorageHelper
     private StorageReference studentsFiles = mStorage.getReference().child("alumnos");
     private Information information;
 
-    public void addImage(final String numeroCtrl, Uri uri, Context context, String email)
+    public void addImage(final String numeroCtrl, Uri uri, Context context, Alumno alumno)
     {
         //Register observers to listen for when the download is done or if it fails.
         studentsFiles.child(numeroCtrl).putFile(uri).addOnFailureListener(new OnFailureListener() {
@@ -36,8 +45,7 @@ public class FirebaseStorageHelper
                     public void onSuccess(Uri uri)
                     {
                         //Enviar el correo electronico
-
-                        //firestoreHelperProductos.updateDataProductImage(document,uri.toString(),dialog,status,context);
+                        sendEmailWithGmail(StringHelper.email, StringHelper.pass, alumno.getCorreo(), context, alumno, uri );
                     }
                 });
             }
@@ -67,4 +75,23 @@ public class FirebaseStorageHelper
     {
         this.information=status;
     }
+
+    private void sendEmailWithGmail(final String from, final String passwordfrom, String to, Context context, Alumno alumno, Uri uriQR) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        Session session = Session.getDefaultInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, passwordfrom);
+            }
+        });
+
+        SenderAsyncTask task = new SenderAsyncTask(session,from,to,context,alumno, uriQR);
+        task.execute();
+    }
+
 }
