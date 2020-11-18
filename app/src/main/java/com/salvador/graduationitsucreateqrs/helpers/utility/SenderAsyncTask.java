@@ -64,7 +64,8 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         progressDialog.dismiss();
-        Toast.makeText(context, "Se enviará la invitación de la ceremonia de gradución a tu correo "+ alumno.getCorreo(), Toast.LENGTH_LONG).show();
+        new AlertDialogPersonalized().alertDialogInformacion("Se enviará la invitación de la ceremonia de gradución a tu correo: "+ alumno.getCorreo()+".", context);
+        //Toast.makeText(context, "Se enviará la invitación de la ceremonia de gradución a tu correo "+ alumno.getCorreo(), Toast.LENGTH_LONG).show();
     }
 
     private void enviarInvitacion() throws UnsupportedEncodingException, MessagingException {
@@ -72,17 +73,17 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
         mimeMessage.setFrom(new InternetAddress(from, "ITSU"));
         mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         mimeMessage.setSubject("Invitación Ceremonia De Graduación ITSU.");
-        String htmlText2 = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\"https://firebasestorage.googleapis.com/v0/b/integratec-itsu.appspot.com/o/integratec4.png?alt=media&token=67ee39a5-9dbb-4cf7-b0cb-5fe09d9222fc\"></p>";
-        String htmlText3 = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\""+uriQR+"></p>";
+        String htmlImagenInvitacion = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\"https://firebasestorage.googleapis.com/v0/b/graduacion-itsu.appspot.com/o/Invitcion_Graduacion2015_2020_ac.png?alt=media&token=6432079e-3056-4235-b482-4c8fbfb18b79\"></p>";
+        String htmlImagenQR = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\""+uriQR+"></p>";
         String htmlText =
                 "<body> " +
                         "<h4><font size=3 face=\"Sans Serif,arial,verdana\">Hola, Ing. " + alumno.getNombre() + "</font></h4> " +
                         "<br>" +
-                        htmlText2 +
+                        htmlImagenInvitacion +
                         "<hr>" +
                         "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">" + "Este QR es tú pase para la ceremonia de graduación.<strong>"/*nombre*/
                         +
-                        htmlText3
+                        htmlImagenQR
                         +
                         "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">Compartelo con tu invitado.</p>" +
                         "<br>" +

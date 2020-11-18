@@ -239,6 +239,14 @@ public class MainActivity extends AppCompatActivity implements Information {
             animationView2.setVisibility(View.VISIBLE);
             animationView2.playAnimation();
             Snackbar.make(animationView2.getRootView(), "Felicidades Ingeniero ITSU", Snackbar.LENGTH_LONG).show();
+            try {
+                imagen = ImagesHelper.from(getApplicationContext(),getImage(bitmap));
+                imagen= new Compressor(getApplicationContext()).compressToFile(imagen);
+                firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
+                firebaseStorageHelper.addImage(alumno.getId(),Uri.fromFile(imagen), MainActivity.this,alumno);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
             Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
@@ -256,16 +264,6 @@ public class MainActivity extends AppCompatActivity implements Information {
             bitmap = QRCode.from(new Encriptacion().encryptAE(qr)).withSize(400, 400).bitmap();
             imageView.setImageBitmap(bitmap);
             imageView.setVisibility(View.VISIBLE);
-
-            try {
-                imagen = ImagesHelper.from(getApplicationContext(),getImage(bitmap));
-                imagen= new Compressor(getApplicationContext()).compressToFile(imagen);
-                firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
-                firebaseStorageHelper.addImage(alumno.getId(),Uri.fromFile(imagen), MainActivity.this,alumno);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
 
     }

@@ -54,7 +54,7 @@ public class FirestoreHelper
                                                       "Si existe algún error, comunícate con el jefe de carrera de ISC.\n"+
                                                        context.getString(R.string.correo_jefe)+"\n\n"+
                                                       "Comparte la imagen con tu invitado ya que en la entrada será requerida.");
-                        alertDialogBuilder.setPositiveButton("Aceptar",
+                        alertDialogBuilder.setPositiveButton("Recibir invitación por email.",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface alertDialog, int i)
