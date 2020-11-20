@@ -8,8 +8,6 @@ import java.util.Calendar;
 
 public class StringHelper
 {
-
-
     public static  String getCarrara(String val)
     {
         String carr = "";
