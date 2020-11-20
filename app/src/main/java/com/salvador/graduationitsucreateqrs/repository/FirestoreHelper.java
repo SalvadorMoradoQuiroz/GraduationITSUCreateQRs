@@ -43,7 +43,7 @@ public class FirestoreHelper
                     if (Objects.requireNonNull(document).exists())
                     {
                         Map<String,Object> data=document.getData();
-                        Alumno alumno = new  Alumno(document.getId(),String.valueOf(data.get("nombre")),String.valueOf(data.get("carrera")),String.valueOf(data.get("grupo")),String.valueOf(data.get("correo")));
+                        Alumno alumno = new  Alumno(document.getId(),String.valueOf(data.get("asiento")),String.valueOf(data.get("nombre")),String.valueOf(data.get("carrera")),String.valueOf(data.get("grupo")),String.valueOf(data.get("correo")).toLowerCase());
                         final AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder(context);
                         alertDialogBuilder.setCancelable(false);
                         alertDialogBuilder.setTitle("Datos Obtenidos");
@@ -102,7 +102,7 @@ public class FirestoreHelper
 
     }
     // este proceso solo se puede hacer de 500 en 500 no en más
-   /*public void sendAllInformation(Information information, final ProgressDialog dialog)
+   public void sendAllInformation(Information information, final ProgressDialog dialog)
     {
         dialog.show();
         WriteBatch batch = db.batch();
@@ -115,12 +115,14 @@ public class FirestoreHelper
             nycRef = AlumnosCollection.document(alumnos.get(i).getId());
             //batch.set(nycRef, new Alumno2());
 
-            Map<String,Object> data = new HashMap<>();
-            data.put("nombre",alumnos.get(i).getCarrera());
+            /*Map<String,Object> data = new HashMap<>();
+            data.put("asiento",alumnos.get(i).getAsiento());
+            data.put("correo",alumnos.get(i).getCorreo());
+            data.put("nombre",alumnos.get(i).getNombre());
             data.put("grupo",alumnos.get(i).getGrupo());
-            data.put("carrera",alumnos.get(i).getNombre());
+            data.put("carrera",alumnos.get(i).getCarrera());
             data.put("status",alumnos.get(i).getStatus());
-            batch.update(nycRef,data);
+            batch.update(nycRef,data);*/
         }
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -140,6 +142,8 @@ public class FirestoreHelper
     class Alumno2
     {
         String nombre;
+        String asiento;
+        String correo;
         String carrera;
         String grupo;
         int status;
@@ -147,11 +151,46 @@ public class FirestoreHelper
         {
 
         }
-        public Alumno2(String nombre, String carrera, String grupo,int status) {
+
+        public Alumno2(String nombre, String asiento, String correo, String carrera, String grupo, int status) {
             this.nombre = nombre;
+            this.asiento = asiento;
+            this.correo = correo;
             this.carrera = carrera;
             this.grupo = grupo;
-            this.status=status;
+            this.status = status;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getAsiento() {
+            return asiento;
+        }
+
+        public void setAsiento(String asiento) {
+            this.asiento = asiento;
+        }
+
+        public String getCorreo() {
+            return correo;
+        }
+
+        public void setCorreo(String correo) {
+            this.correo = correo;
+        }
+
+        public void setCarrera(String carrera) {
+            this.carrera = carrera;
+        }
+
+        public void setGrupo(String grupo) {
+            this.grupo = grupo;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
         }
 
         public int getStatus() {
@@ -169,6 +208,6 @@ public class FirestoreHelper
             return grupo;
         }
 
-    }*/
+    }
 
 }

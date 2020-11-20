@@ -34,7 +34,7 @@ public class FirebaseStorageHelper
             @Override
             public void onFailure(@NonNull Exception exception)
             {
-                information.status("Error al subir la imagen de QR al sistema, verifica tu conexión a Internet");
+               // information.status("Error al subir la imagen de QR al sistema, verifica tu conexión a Internet");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -60,13 +60,13 @@ public class FirebaseStorageHelper
             @Override
             public void onSuccess(Void aVoid)
             {
-                information.status("Se ha actualizado la imagen de QR en el sistema.");
+               // information.status("Se ha actualizado la imagen de QR en el sistema.");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception)
             {
-                information.status("Error de actualización de imagen QR, verifica tu conexión a Internet");
+                //information.status("Error de actualización de imagen QR, verifica tu conexión a Internet");
             }
         });
     }

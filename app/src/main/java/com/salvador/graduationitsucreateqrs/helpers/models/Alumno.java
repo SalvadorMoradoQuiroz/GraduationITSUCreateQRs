@@ -2,12 +2,21 @@ package com.salvador.graduationitsucreateqrs.helpers.models;
 
 public class Alumno
 {
+    String asiento;
     String id;
     String nombre;
     String carrera;
     String grupo;
     int status;
     String correo;
+
+    public String getAsiento() {
+        return asiento;
+    }
+
+    public void setAsiento(String asiento) {
+        this.asiento = asiento;
+    }
 
     public int getStatus() {
         return status;
@@ -17,13 +26,15 @@ public class Alumno
         this.status = status;
     }
 
-    public Alumno(String id, String nombre, String carrera, String grupo, String correo) {
+    public Alumno(String id, String asiento,String nombre, String carrera, String grupo, String correo) {
         this.id = id;
+        this.asiento=asiento;
         this.nombre = nombre;
         this.carrera = carrera;
         this.grupo = grupo;
-        status=0;
         this.correo=correo;
+        status=0;
+
     }
 
     public Alumno(String id, String nombre, String carrera, String grupo,int status) {

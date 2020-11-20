@@ -49,6 +49,7 @@ import id.zelory.compressor.Compressor;
 public class MainActivity extends AppCompatActivity implements Information {
 
     private final int REQUEST_CODE_ASK_PERMISSION = 111;
+
     private Button buttonGuardar;
     private Button buttonBuscar;
     private ImageView imageView;
@@ -72,42 +73,46 @@ public class MainActivity extends AppCompatActivity implements Information {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonBuscar = findViewById(R.id.buttonBuscar);
-        buttonGuardar = findViewById(R.id.buttonGuardar);
+       // buttonGuardar = findViewById(R.id.buttonGuardar);
         imageView = findViewById(R.id.imageView);
         imageView.setVisibility(View.INVISIBLE);
         animationView2 = findViewById(R.id.animationView2);
         animationView2.setVisibility(View.INVISIBLE);
         setTitle(R.string.graduaci_n_itsu);
 
+           /* buttonGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (bitmap != null) {
+                        if (solicitarPermiso(REQUEST_CODE_ASK_PERMISSION)) {
 
-        buttonGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (bitmap != null) {
-                    if (solicitarPermiso()) {
-
-                        try {
-                            saveImage(bitmap, nombreQR);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            try {
+                                saveImage(bitmap, nombreQR);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            //Toast.makeText(getApplicationContext(),"Para guardar la invitación necesita conceder los permisos.",Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        //Toast.makeText(getApplicationContext(),"Para guardar la invitación necesita conceder los permisos.",Toast.LENGTH_LONG).show();
+                        Snackbar.make(view, "Debes buscar la invitación primero.", Snackbar.LENGTH_LONG).show();
                     }
-                } else {
-                    Snackbar.make(view, "Debes buscar la invitación primero.", Snackbar.LENGTH_LONG).show();
                 }
-            }
-        });
-        buttonBuscar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            });*/
+            buttonBuscar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                 /*ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
                     "Buscando...", true);
                 firestoreHelper.sendAllInformation(MainActivity.this,dialog);*/
-                showDialogBuscar();
-            }
-        });
+                    if(solicitarPermiso(112))
+                    {
+                        showDialogBuscar();
+                    }
+                }
+            });
+
+
 
     }
 
@@ -130,19 +135,22 @@ public class MainActivity extends AppCompatActivity implements Information {
             @Override
             public void onClick(View view) {
 
-                ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
-                        "Buscando...", true);
-                dialog.show();
-                String numerodecontrol = textInput_numeroCtrl.getEditText().getText().toString();
-
-                if (numerodecontrol.length() == 8) {
-                    firestoreHelper.getData(numerodecontrol, dialog, MainActivity.this, MainActivity.this);
-                    dialogSearchInvitation.dismiss();
-                } else {
-                    Snackbar.make(view, "Número de control no válido.", Snackbar.LENGTH_SHORT).show();
-                    //Toast.makeText(getApplicationContext(),"Número de control no válido.",Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
+                    if(solicitarPermiso(112))
+                    {
+                        ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+                                "Buscando...", true);
+                        dialog.show();
+                        String numerodecontrol = textInput_numeroCtrl.getEditText().getText().toString();
+                        //firestoreHelper.sendAllInformation(MainActivity.this, dialog);
+                        if (numerodecontrol.length() == 8) {
+                            firestoreHelper.getData(numerodecontrol, dialog, MainActivity.this, MainActivity.this);
+                            dialogSearchInvitation.dismiss();
+                        } else {
+                            Snackbar.make(view, "Número de control no válido.", Snackbar.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(),"Número de control no válido.",Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
             }
         });
 
@@ -155,15 +163,18 @@ public class MainActivity extends AppCompatActivity implements Information {
     }
 
 
-    private boolean solicitarPermiso() {
+    private boolean solicitarPermiso(int val) {
         int permiso = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permiso != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSION);
+        if (permiso != PackageManager.PERMISSION_GRANTED)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, val);
             }
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }
@@ -171,7 +182,8 @@ public class MainActivity extends AppCompatActivity implements Information {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
+        switch (requestCode)
+        {
             case REQUEST_CODE_ASK_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
@@ -185,13 +197,25 @@ public class MainActivity extends AppCompatActivity implements Information {
                     // Permission Denied
                     Snackbar.make(findViewById(android.R.id.content), "Para guardar la invitación necesita conceder los permisos.", Snackbar.LENGTH_SHORT).show();
                 }
+            case 112:
+            {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    showDialogBuscar();
+                }
+                else
+                {
+                    Snackbar.make(findViewById(android.R.id.content), "Para buscar necesita conceder permisos", Snackbar.LENGTH_SHORT).show();
+                }
+            }
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
-    private void saveImage(Bitmap bitmap, @NonNull String name) throws IOException {
+    private Uri saveImage(Bitmap bitmap, @NonNull String name) throws IOException {
         OutputStream outputStream;
+        Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentResolver contentResolver = getApplicationContext().getContentResolver();
             ContentValues contentValues = new ContentValues();
@@ -200,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements Information {
             contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
             Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
             outputStream = contentResolver.openOutputStream(Objects.requireNonNull(imageUri));
+            uri=imageUri;
 
         } else {
             String imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/";
@@ -210,12 +235,13 @@ public class MainActivity extends AppCompatActivity implements Information {
             File image = new File(dir, name + ".jpg");
             outputStream = new FileOutputStream(image);
             MakeSureFileWasCreatedThenMakeAvaliable(image);
-
+            uri=Uri.fromFile(image);
         }
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         Objects.requireNonNull(outputStream).close();
         Snackbar.make(findViewById(android.R.id.content), "Imagen guardada en galeria.", Snackbar.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(),"Imagen guardada en galeria.",Toast.LENGTH_SHORT).show();
+        return  uri;
     }
 
     /**
@@ -226,27 +252,30 @@ public class MainActivity extends AppCompatActivity implements Information {
     private void MakeSureFileWasCreatedThenMakeAvaliable(File file) {
         MediaScannerConnection.scanFile(getApplicationContext(),
                 new String[]{file.toString()}, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-
-                    public void onScanCompleted(String path, Uri uri) {
+                new MediaScannerConnection.OnScanCompletedListener()
+                {
+                    public void onScanCompleted(String path, Uri uri)
+                    {
                     }
                 });
     }
 
     @Override
     public void status(String message) {
-        if (message.equals("fiesta")) {
-            animationView2.setVisibility(View.VISIBLE);
-            animationView2.playAnimation();
-            Snackbar.make(animationView2.getRootView(), "Felicidades Ingeniero ITSU", Snackbar.LENGTH_LONG).show();
-            try {
-                imagen = ImagesHelper.from(getApplicationContext(),getImage(bitmap));
-                imagen= new Compressor(getApplicationContext()).compressToFile(imagen);
-                firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
-                firebaseStorageHelper.addImage(alumno.getId(),Uri.fromFile(imagen), MainActivity.this,alumno);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (message.equals("fiesta"))
+        {
+                animationView2.setVisibility(View.VISIBLE);
+                animationView2.playAnimation();
+                Snackbar.make(animationView2.getRootView(), "Felicidades Ingeniero ITSU", Snackbar.LENGTH_LONG).show();
+                try {
+                    imagen = ImagesHelper.from(getApplicationContext(), saveImage(bitmap,nombreQR));
+                    imagen = new Compressor(getApplicationContext()).compressToFile(imagen);
+                    firebaseStorageHelper.deleteImage(alumno.getId(), MainActivity.this);
+                    firebaseStorageHelper.addImage(alumno.getId(), Uri.fromFile(imagen), MainActivity.this, alumno);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
         } else {
             //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
             Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
@@ -268,12 +297,12 @@ public class MainActivity extends AppCompatActivity implements Information {
 
     }
 
-         public Uri getImage(Bitmap bitmap)
-         {
-             ByteArrayOutputStream bites = new ByteArrayOutputStream();
-             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bites);
-             String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, StringHelper.obtenerFecha(), "");
-             return Uri.parse(path);
-        }
+    public Uri getImage(Bitmap bitmap)
+    {
+        ByteArrayOutputStream bites = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bites);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, StringHelper.obtenerFecha(), "");
+        return Uri.parse(path);
+    }
 
 }

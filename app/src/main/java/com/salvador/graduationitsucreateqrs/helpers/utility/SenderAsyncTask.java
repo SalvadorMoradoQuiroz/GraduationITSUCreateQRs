@@ -64,7 +64,7 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         progressDialog.dismiss();
-        new AlertDialogPersonalized().alertDialogInformacion("Se enviará la invitación de la ceremonia de gradución a tu correo: "+ alumno.getCorreo()+".", context);
+        new AlertDialogPersonalized().alertDialogInformacion("Se enviará la invitación de la ceremonia de gradución a tu correo: "+ alumno.getCorreo()+". Además se almacenó el QR en tu galeria con tu nombre.", context);
         //Toast.makeText(context, "Se enviará la invitación de la ceremonia de gradución a tu correo "+ alumno.getCorreo(), Toast.LENGTH_LONG).show();
     }
 
@@ -73,24 +73,22 @@ public class SenderAsyncTask extends AsyncTask<String, String, String> {
         mimeMessage.setFrom(new InternetAddress(from, "ITSU"));
         mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         mimeMessage.setSubject("Invitación Ceremonia De Graduación ITSU.");
-        String htmlImagenInvitacion = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\"https://firebasestorage.googleapis.com/v0/b/graduacion-itsu.appspot.com/o/Invitcion_Graduacion2015_2020_ac.png?alt=media&token=6432079e-3056-4235-b482-4c8fbfb18b79\"></p>";
-        String htmlImagenQR = "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src=\""+uriQR+"></p>";
+        String htmlImagenInvitacion = "<p ALIGN=\"center\"><img  width=\"2924\" height=\"1836\" src=\"https://firebasestorage.googleapis.com/v0/b/graduacion-itsu.appspot.com/o/Invitcion_Graduacion2015_2020_ac.png?alt=media&token=6432079e-3056-4235-b482-4c8fbfb18b79\"></p>";
+
         String htmlText =
                 "<body> " +
                         "<h4><font size=3 face=\"Sans Serif,arial,verdana\">Hola, Ing. " + alumno.getNombre() + "</font></h4> " +
                         "<br>" +
                         htmlImagenInvitacion +
                         "<hr>" +
-                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">" + "Este QR es tú pase para la ceremonia de graduación.<strong>"/*nombre*/
-                        +
-                        htmlImagenQR
-                        +
-                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">Compartelo con tu invitado.</p>" +
                         "<br>" +
+                        "<p ALIGN=\"justify\"><font size=3 face=\"Sans Serif,arial,verdana\">" + "Este QR es tú pase para la ceremonia de graduación.<br>Compartelo con tu invitado.</p>"+/*nombre*/
+                        "<br>" +
+                        "<p ALIGN=\"center\"><img  width=\"200\" height=\"200\" src="+uriQR+"></p>"+
                         "<hr>" +
                         "<footer>" +
-                        "<p><font color=\"#C5BFBF\" size=2 face=\"Sans Serif,arial,verdana\">Gracias!!</font></p>" +
-                        "<p ALIGN=\"justify\"><font color=\"#C5BFBF\" size=1 face=\"Sans Serif,arial,verdana\"><font color=\"#EA2925\" size=1 face=\"Sans Serif,arial,verdana\">©Graduación ITSU</font> from Instituto Tecnológico Superior de Uruapan, Carretera Uruapan-Carapan No. 5555 Col. La Basilia Uruapan, Michoacán. Este correo fue enviado para: <font color=\"#1a73e8\" size=1 face=\"Sans Serif,arial,verdana\">" + to + "</font> y fue enviado por <font color=\"#EA2925\" size=1 face=\"Sans Serif,arial,verdana\">itsu.sistemas.apps@gmail.com</font></font>.</p>" +
+                        "<p><font size=2 face=\"Sans Serif,arial,verdana\">Felicidades!!!</font></p>" +
+                        "<p ALIGN=\"justify\"><font color=\"#aba7a7\" size=1 face=\"Sans Serif,arial,verdana\"><font color=\"#0047BA\" size=1 face=\"Sans Serif,arial,verdana\">©Graduación ITSU</font> created in Instituto Tecnológico Superior de Uruapan, Carretera Uruapan-Carapan No. 5555 Col. La Basilia Uruapan, Michoacán. Este correo fue enviado para: <font color=\"#1a73e8\" size=1 face=\"Sans Serif,arial,verdana\">" + to + "</font> y fue enviado por <font color=\"#0047BA\" size=1 face=\"Sans Serif,arial,verdana\">itsu.sistemas.apps@gmail.com</font></font></p>" +
                         "</footer>" +
                         "</body>";
         mimeMessage.setContent(htmlText, "text/html; charset=utf-8");
