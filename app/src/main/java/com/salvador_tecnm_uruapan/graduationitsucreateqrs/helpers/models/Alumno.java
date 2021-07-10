@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs.helpers.models;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.models;
 
 public class Alumno
 {

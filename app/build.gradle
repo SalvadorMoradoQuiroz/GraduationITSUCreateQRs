@@ -5,14 +5,14 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.salvador.graduationitsucreateqrs"
+        applicationId "com.salvador_tecnm_uruapan.graduationitsucreateqrs"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 3
-        versionName "3.0"
+        versionCode 4
+        versionName "3.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,28 +31,28 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //implementacion lector qr
     implementation 'com.journeyapps:zxing-android-embedded:3.2.0'
     //implementacion del creador  qr
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
 
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:26.0.0')
-    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
     //add the Firebase SDK for Firbase Firestore
-    implementation 'com.google.firebase:firebase-firestore:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore:23.0.1'
     //storage
-    implementation 'com.google.firebase:firebase-storage:19.2.0'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
 
     //lottie animations
     implementation "com.airbnb.android:lottie:3.4.4"

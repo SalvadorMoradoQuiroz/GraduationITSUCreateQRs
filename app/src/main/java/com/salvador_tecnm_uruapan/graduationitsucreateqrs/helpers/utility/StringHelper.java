@@ -1,6 +1,6 @@
-package com.salvador.graduationitsucreateqrs.helpers.utility;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility;
 
-import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.models.Alumno;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +8,8 @@ import java.util.Calendar;
 
 public class StringHelper
 {
+
+
     public static  String getCarrara(String val)
     {
         String carr = "";

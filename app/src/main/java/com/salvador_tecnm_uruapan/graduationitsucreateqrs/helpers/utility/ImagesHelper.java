@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs.helpers.utility;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility;
 
 import android.content.Context;
 import android.database.Cursor;

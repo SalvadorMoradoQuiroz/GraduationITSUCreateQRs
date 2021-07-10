@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs.repository;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs.repository;
 
 
 import android.app.AlertDialog;
@@ -15,14 +15,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
-import com.salvador.graduationitsucreateqrs.R;
-import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
-import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
-import com.salvador.graduationitsucreateqrs.helpers.utility.StringHelper;
-import com.salvador.graduationitsucreateqrs.MainActivity;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.R;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.interfaces.Information;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.models.Alumno;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility.StringHelper;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.MainActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 

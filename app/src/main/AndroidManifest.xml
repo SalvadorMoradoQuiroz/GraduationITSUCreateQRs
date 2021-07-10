@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.salvador.graduationitsucreateqrs">
+    package="com.salvador_tecnm_uruapan.graduationitsucreateqrs">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -11,14 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationITSUCreateQRs">
-        <activity android:name=".SplashActivity">
+        <activity android:name="com.salvador_tecnm_uruapan.graduationitsucreateqrs.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name="com.salvador_tecnm_uruapan.graduationitsucreateqrs.MainActivity"/>
+        <activity android:name=".AboutActivity" android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

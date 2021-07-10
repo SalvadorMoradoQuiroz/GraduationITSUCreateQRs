@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(com.salvador.graduationitsucreateqrs.SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(com.salvador_tecnm_uruapan.graduationitsucreateqrs.SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

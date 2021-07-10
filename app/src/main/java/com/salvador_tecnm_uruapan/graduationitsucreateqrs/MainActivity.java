@@ -1,9 +1,10 @@
-package com.salvador.graduationitsucreateqrs;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -18,30 +19,36 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.salvador.graduationitsucreateqrs.helpers.interfaces.Information;
-import com.salvador.graduationitsucreateqrs.helpers.models.Alumno;
-import com.salvador.graduationitsucreateqrs.helpers.utility.Encriptacion;
-import com.salvador.graduationitsucreateqrs.helpers.utility.ImagesHelper;
-import com.salvador.graduationitsucreateqrs.helpers.utility.StringHelper;
-import com.salvador.graduationitsucreateqrs.repository.FirebaseStorageHelper;
-import com.salvador.graduationitsucreateqrs.repository.FirestoreHelper;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.interfaces.Information;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.models.Alumno;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility.Encriptacion;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility.ImagesHelper;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility.StringHelper;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.repository.FirebaseStorageHelper;
+import com.salvador_tecnm_uruapan.graduationitsucreateqrs.repository.FirestoreHelper;
 
 import net.glxn.qrgen.android.QRCode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+import java.util.logging.SimpleFormatter;
 
 import id.zelory.compressor.Compressor;
 
@@ -59,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements Information {
     private final FirestoreHelper firestoreHelper = new FirestoreHelper();
     private FirebaseStorageHelper firebaseStorageHelper = new FirebaseStorageHelper();
     LottieAnimationView animationView2;
+    private TextView textView_by;
     private Alumno alumno;
     private File imagen;
 
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements Information {
         firebaseStorageHelper.setInformationListener(MainActivity.this);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements Information {
         imageView.setVisibility(View.INVISIBLE);
         animationView2 = findViewById(R.id.animationView2);
         animationView2.setVisibility(View.INVISIBLE);
+        textView_by = findViewById(R.id.textView_by);
+
+        textView_by.setText(new StringBuilder().append("TecNM campus Uruapan 2020 -").append(new SimpleDateFormat("yyyy").format(new Date())).toString());
         setTitle(R.string.graduaci_n_itsu);
 
            /* buttonGuardar.setOnClickListener(new View.OnClickListener() {
@@ -297,12 +309,32 @@ public class MainActivity extends AppCompatActivity implements Information {
 
     }
 
-    public Uri getImage(Bitmap bitmap)
+    /*public Uri getImage(Bitmap bitmap)
     {
         ByteArrayOutputStream bites = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bites);
         String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, StringHelper.obtenerFecha(), "");
         return Uri.parse(path);
+    }*/
+    /**
+     *  MENU POPUP
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.overflow,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent;
+        if (id == R.id.item_AcercaDe) {
+            Toast.makeText(MainActivity.this, getResources().getText(R.string.acerca_de) + "...", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

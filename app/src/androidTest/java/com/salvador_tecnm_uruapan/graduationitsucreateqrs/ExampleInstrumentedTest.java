@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs;
 
 import android.content.Context;
 

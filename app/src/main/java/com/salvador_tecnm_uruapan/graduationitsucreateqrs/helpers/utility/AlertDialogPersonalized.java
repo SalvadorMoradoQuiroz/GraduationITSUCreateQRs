@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs.helpers.utility;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility;
 
 import android.app.AlertDialog;
 import android.content.Context;

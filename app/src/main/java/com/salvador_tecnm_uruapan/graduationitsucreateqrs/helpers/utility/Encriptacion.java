@@ -1,4 +1,4 @@
-package com.salvador.graduationitsucreateqrs.helpers.utility;
+package com.salvador_tecnm_uruapan.graduationitsucreateqrs.helpers.utility;
 
 import org.apache.commons.codec.binary.Base64;
 
